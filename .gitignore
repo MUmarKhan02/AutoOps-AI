@@ -1,0 +1,57 @@
+# Secrets
+.env
+
+# Visual Studio
+.vs/
+*.slnx
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.pidb
+*.booproj
+.idea/
+
+# C# build output
+bin/
+obj/
+*.dll
+*.exe
+*.pdb
+*.cache
+publish/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+dist/
+build/
+*.pyc
+
+# Node
+node_modules/
+frontend/dist/
+.npm/
+
+# Storage (uploaded files — keep the folder, not the contents)
+storage/uploads/*
+!storage/uploads/.gitkeep
+
+# Alembic generated migrations
+backend-python/alembic/versions/*.py
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+*.swp
+*.swo
+*~
+
+# Docker
+*.log
