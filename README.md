@@ -2,6 +2,13 @@
 
 AI-powered document processing platform with a polyglot microservice architecture.
 
+---
+
+## Live Demo
+
+**[https://auto-ops-ai-mu.vercel.app/](https://auto-ops-ai-mu.vercel.app/)**
+
+
 ## Architecture
 
 ```
@@ -20,24 +27,21 @@ Python AI Worker (Celery)    ← Document parsing + Gemini AI
 
 | Service | Technology |
 |---------|-----------|
-| API | ASP.NET Core 10 (C#) |
+| API | ASP.NET Core 10 (C#) + Entity Framework Core|
 | AI Worker | Python + Celery + Redis |
 | AI Model | Gemini 2.5 Flash |
-| Database | PostgreSQL + Entity Framework Core |
+| Database | PostgreSQL |
 | Frontend | React + Vite + TypeScript + Tailwind + Zustand |
 | Infrastructure | Docker + Docker Compose |
-
-## Live Demo
-
-**[https://auto-ops-ai-mu.vercel.app/](https://auto-ops-ai-mu.vercel.app/)**
+| Vercel (frontend), Railway (API, worker, PostgreSQL, Redis) |
 
 ---
 
 ## Quick Start
 
 ```bash
-git clone <your-repo>
-cd autoops-ai
+git clone https://github.com/MUmarKhan02/AutoOps-AI
+cd AutoOps-AI
 cp .env.example .env   # add your GEMINI_API_KEY
 docker compose up --build
 ```
@@ -46,28 +50,13 @@ Open **http://localhost:5173**
 
 ---
 
-## API Endpoints (ASP.NET Core)
+## Features
 
-### Auth
-| Method | Path | Description |
-|--------|------|-------------|
-| POST | `/api/auth/register` | Register |
-| POST | `/api/auth/login` | Login |
-| POST | `/api/auth/refresh` | Refresh token |
-| GET | `/api/auth/me` | Current user |
-
-### Documents
-| Method | Path | Description |
-|--------|------|-------------|
-| POST | `/api/documents/upload` | Upload file, create job |
-| GET | `/api/documents/` | List documents |
-
-### Jobs
-| Method | Path | Description |
-|--------|------|-------------|
-| GET | `/api/jobs/` | List jobs |
-| GET | `/api/jobs/{id}` | Job details |
-| GET | `/api/jobs/{id}/result` | AI result |
-| GET | `/api/jobs/{id}/stream` | SSE live status |
+- JWT Authentication — register, login, access + refresh token flow with backend password validation
+- Document Upload — PDF, DOCX, and TXT support up to 20MB
+- Async Job Queue — Redis-backed Celery workers process documents without blocking the API
+- Real-time Progress — Server-Sent Events (SSE) stream live stage updates (parsing → chunking → analyzing → completed)
+- AI Processing — Gemini 2.5 Flash generates summaries and extracts structured key-value data
+- Job History — full processing history with result detail view
 
 ---
