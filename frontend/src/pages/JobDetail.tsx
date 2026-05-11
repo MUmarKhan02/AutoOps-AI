@@ -196,7 +196,7 @@ export default function JobDetail() {
           )}
 
           {/* Document stats */}
-          {result.doc_metadata && (
+          {result.metadata && (
             <div className="card overflow-hidden">
               <div className="flex items-center gap-2 px-5 py-3.5 border-b border-border bg-surface-2">
                 <FileText size={13} className="text-accent" />
@@ -208,7 +208,7 @@ export default function JobDetail() {
                   { key: 'page_count', label: 'Pages', icon: <FileText size={12} /> },
                   { key: 'char_count', label: 'Characters', icon: <Clock size={12} /> },
                 ].map(({ key, label, icon }) => {
-                  const val = result.doc_metadata?.[key as keyof typeof result.doc_metadata]
+                  const val = result.metadata?.[key as keyof typeof result.metadata]
                   return (
                     <div key={key} className="px-5 py-4">
                       <div className="flex items-center gap-1.5 text-slate-500 mb-1.5">
