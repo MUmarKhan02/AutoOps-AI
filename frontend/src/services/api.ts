@@ -1,8 +1,8 @@
 import axios from 'axios'
 
 const api = axios.create({
-  baseURL: '/api',
-  headers: { 'Content-Type': 'application/json' },
+    baseURL: (import.meta.env.VITE_API_URL ?? '') + '/api',
+    headers: { 'Content-Type': 'application/json' },
 })
 
 // Attach access token to every request
@@ -22,7 +22,7 @@ api.interceptors.response.use(
       const refresh_token = localStorage.getItem('refresh_token')
       if (refresh_token) {
         try {
-          const { data } = await axios.post('/api/auth/refresh', { refresh_token })
+            const { data } = await axios.post((import.meta.env.VITE_API_URL ?? '') + '/api/auth/refresh', { refresh_token })
           localStorage.setItem('access_token', data.access_token)
           localStorage.setItem('refresh_token', data.refresh_token)
           original.headers.Authorization = `Bearer ${data.access_token}`
