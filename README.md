@@ -33,7 +33,7 @@ Python AI Worker (Celery)    ← Document parsing + Gemini AI
 | Database | PostgreSQL |
 | Frontend | React + Vite + TypeScript + Tailwind + Zustand |
 | Infrastructure | Docker + Docker Compose |
-| Vercel (frontend), Railway (API, worker, PostgreSQL, Redis) |
+| Deployment | Vercel (frontend), Railway (API, worker, PostgreSQL, Redis) |
 
 ---
 
