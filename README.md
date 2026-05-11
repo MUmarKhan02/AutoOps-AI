@@ -27,6 +27,10 @@ Python AI Worker (Celery)    ← Document parsing + Gemini AI
 | Frontend | React + Vite + TypeScript + Tailwind + Zustand |
 | Infrastructure | Docker + Docker Compose |
 
+## Live Demo
+
+**[https://auto-ops-ai-mu.vercel.app/](https://auto-ops-ai-mu.vercel.app/)**
+
 ---
 
 ## Quick Start
