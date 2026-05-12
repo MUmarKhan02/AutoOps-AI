@@ -28,7 +28,7 @@ function StageTracker({ stage, status }: { stage: string; status: string }) {
                     const effectiveStage = status === 'completed' ? 'completed' : stage
                     const stageIdx = STAGES.indexOf(effectiveStage)
                     const thisIdx = STAGES.indexOf(s)
-                    const done = stageIdx > thisIdx
+                    const done = stageIdx > thisIdx || (s === 'completed' && status === 'completed')
                     const current = stageIdx === thisIdx && active
                     const isLast = i === arr.length - 1
 
