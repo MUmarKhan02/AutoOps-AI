@@ -4,10 +4,6 @@ using System.Text.Json;
 
 namespace AutoOpsAI.Services;
 
-/// <summary>
-/// Pushes a document processing task to the Redis queue that the Python
-/// Celery worker is listening on.
-/// </summary>
 public class JobQueueService(IConnectionMultiplexer redis, ILogger<JobQueueService> logger)
 {
     public async Task<string> EnqueueAsync(
@@ -16,9 +12,17 @@ public class JobQueueService(IConnectionMultiplexer redis, ILogger<JobQueueServi
         var taskId = Guid.NewGuid().ToString();
         var db = redis.GetDatabase();
 
-        // Celery message format — body must be base64([args, kwargs, embed])
-        // where embed = {callbacks, errbacks, chain, chord}
-        var args = new object[] { jobId, documentId, storagePath, fileType };
+        // Store file content in Redis so the Python worker can access it
+        // without needing a shared filesystem
+        var fileKey = $"file:{jobId}";
+        var fileBytes = await File.ReadAllBytesAsync(storagePath);
+        var fileBase64 = Convert.ToBase64String(fileBytes);
+        await db.StringSetAsync(fileKey, fileBase64, TimeSpan.FromHours(2));
+
+        // Pass the Redis key as storage_path so the worker knows to read from Redis
+        var redisStoragePath = $"redis:{fileKey}";
+
+        var args = new object[] { jobId, documentId, redisStoragePath, fileType };
         var kwargs = new Dictionary<string, object>();
         var embed = new Dictionary<string, object?>
         {
@@ -28,7 +32,6 @@ public class JobQueueService(IConnectionMultiplexer redis, ILogger<JobQueueServi
             ["chord"] = null
         };
 
-        // Serialize body as JSON array of exactly 3 elements
         var bodyList = new object[] { args, kwargs, embed };
         var bodyBytes = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(bodyList));
         var bodyBase64 = Convert.ToBase64String(bodyBytes);
@@ -52,7 +55,7 @@ public class JobQueueService(IConnectionMultiplexer redis, ILogger<JobQueueServi
                 ["timelimit"] = new object?[] { null, null },
                 ["root_id"] = taskId,
                 ["parent_id"] = null,
-                ["argsrepr"] = $"('{jobId}', '{documentId}', '{storagePath}', '{fileType}')",
+                ["argsrepr"] = $"('{jobId}', '{documentId}', '{redisStoragePath}', '{fileType}')",
                 ["kwargsrepr"] = "{}",
                 ["origin"] = "autoops-csharp"
             },
