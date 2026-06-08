@@ -47,20 +47,7 @@ export default function AppLayout() {
           ))}
         </nav>
 
-        {/* Stack badge */}
-        <div className="px-4 py-3 mx-3 mb-3 rounded-lg bg-surface-2 border border-border">
-          <p className="text-[10px] text-slate-500 uppercase tracking-wide mb-1.5">Powered by</p>
-          <div className="space-y-1">
-            <div className="flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-purple-400" />
-              <span className="text-xs text-slate-300">ASP.NET Core (C#)</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-accent" />
-              <span className="text-xs text-slate-300">Python AI Worker</span>
-            </div>
-          </div>
-        </div>
+        
 
         {/* User */}
         <div className="px-3 py-4 border-t border-border">
