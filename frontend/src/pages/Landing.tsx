@@ -1,13 +1,8 @@
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useRef } from 'react'
-import logoUrl from '../assets/logo.svg'
+import logoUrl from '../assets/logo.png'
 
-const features = [
-  { icon: '⬆', title: 'Upload Any Document', desc: 'PDF, DOCX, or TXT. Drop it in and the pipeline starts immediately.' },
-  { icon: '⚡', title: 'Async Processing Queue', desc: 'Redis-backed Celery workers process your documents in parallel without blocking.' },
-  { icon: '◎', title: 'Live Progress Tracking', desc: 'Watch every stage in real time — parsing, chunking, analyzing — via SSE streaming.' },
-  { icon: '◈', title: 'AI-Powered Extraction', desc: 'Gemini reads your document and returns structured summaries and key data fields.' },
-]
+
 
 const steps = [
   { n: '01', label: 'Upload', desc: 'Drop in your PDF, DOCX, or TXT file.' },
@@ -28,7 +23,7 @@ export default function Landing() {
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
 
-    const dots: { x: number; y: number; vx: number; vy: number; r: number }[] = []
+    const dots: { x: number; y: number; vx: number; vy: number; r: number; purple: boolean }[] = []
     for (let i = 0; i < 60; i++) {
       dots.push({
         x: Math.random() * canvas.width,
@@ -36,6 +31,7 @@ export default function Landing() {
         vx: (Math.random() - 0.5) * 0.3,
         vy: (Math.random() - 0.5) * 0.3,
         r: Math.random() * 1.5 + 0.5,
+        purple: Math.random() > 0.5,
       })
     }
 
@@ -48,7 +44,7 @@ export default function Landing() {
         if (d.y < 0 || d.y > canvas.height) d.vy *= -1
         ctx.beginPath()
         ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2)
-        ctx.fillStyle = 'rgba(110,231,183,0.25)'
+        ctx.fillStyle = d.purple ? 'rgba(167,139,250,0.25)' : 'rgba(110,231,183,0.25)'
         ctx.fill()
       })
       dots.forEach((a, i) => {
@@ -56,7 +52,10 @@ export default function Landing() {
           const dist = Math.hypot(a.x - b.x, a.y - b.y)
           if (dist < 120) {
             ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y)
-            ctx.strokeStyle = `rgba(110,231,183,${0.06 * (1 - dist / 120)})`
+            const alpha = 0.06 * (1 - dist / 120)
+            ctx.strokeStyle = a.purple && b.purple
+              ? `rgba(167,139,250,${alpha})`
+              : `rgba(110,231,183,${alpha})`
             ctx.lineWidth = 0.5; ctx.stroke()
           }
         })
@@ -95,20 +94,21 @@ export default function Landing() {
 
       {/* Hero */}
       <section className="relative z-10 flex flex-col items-center text-center px-6 pt-28 pb-24">
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-accent/30 bg-accent/5 text-accent text-xs font-medium mb-8 tracking-wide">
-          <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
-          Powered by Gemini 2.5 Flash · Built on FastAPI + ASP.NET Core + Celery
-        </div>
+        
 
         <h1 className="text-5xl sm:text-7xl font-bold text-white leading-[1.05] tracking-tight max-w-4xl mb-6">
-          AI document<br />
-          <span className="text-accent">intelligence</span><br />
-          at scale
+          Operational<br />
+          <span style={{
+            background: 'linear-gradient(135deg, #6EE7B7 0%, #a78bfa 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+          }}>intelligence</span><br />
+          for documents
         </h1>
 
         <p className="text-slate-400 text-lg max-w-xl mb-10 leading-relaxed">
-          Upload any document. Get back a structured AI summary, extracted key fields,
-          and metadata — automatically, asynchronously, in real time.
+          Drop in any document. AutoOps AI parses, extracts key information hands it back. Automation, just at your fingertips. 
         </p>
 
         <div className="flex items-center gap-3 flex-wrap justify-center mb-20">
@@ -137,50 +137,21 @@ export default function Landing() {
             <p><span className="text-slate-500">words</span>     <span className="text-slate-300">3,842</span>  <span className="text-slate-500 ml-4">pages</span>  <span className="text-slate-300">12</span></p>
             <div className="border-t border-border my-2" />
             <p className="text-slate-500">// summary</p>
-            <p className="text-slate-300 leading-relaxed">Acme Corp's Q3 2024 report shows revenue of $4.2M, up 18% YoY. Operating margins improved to 23% driven by cost reduction initiatives. The report highlights expansion into three new markets and forecasts Q4 growth of 12–15%...</p>
+            <p className="text-slate-300 leading-relaxed">Acme Corp's Q3 2024 report shows revenue of $4.2M, up 18% YoY. Operating margins improved to 23% driven by cost reduction initiatives...</p>
             <div className="border-t border-border my-2" />
             <p className="text-slate-500">// extracted</p>
             <p><span className="text-accent">company</span>      <span className="text-slate-300">Acme Corp</span></p>
-            <p><span className="text-accent">period</span>       <span className="text-slate-300">Q3 2024</span></p>
+            <p><span style={{ color: '#a78bfa' }}>period</span>        <span className="text-slate-300">Q3 2024</span></p>
             <p><span className="text-accent">revenue</span>      <span className="text-slate-300">$4,200,000</span></p>
-            <p><span className="text-accent">growth_yoy</span>   <span className="text-slate-300">18%</span></p>
+            <p><span style={{ color: '#a78bfa' }}>growth_yoy</span>   <span className="text-slate-300">18%</span></p>
             <p><span className="text-accent">margin</span>       <span className="text-slate-300">23%</span></p>
           </div>
         </div>
       </section>
 
-      {/* Dual backend callout */}
-      <section className="relative z-10 px-6 py-12 max-w-5xl mx-auto">
-        <div className="card p-6 border-accent/20 bg-accent/3">
-          <div className="flex items-start gap-4">
-            <div className="text-2xl">⚙</div>
-            <div>
-              <h3 className="text-sm font-semibold text-white mb-1">Dual-backend architecture</h3>
-              <p className="text-sm text-slate-400 leading-relaxed">
-                AutoOps AI runs identical REST APIs in both <span className="text-accent font-medium">Python (FastAPI)</span> and <span className="text-purple-400 font-medium">C# (ASP.NET Core)</span>,
-                sharing the same PostgreSQL database and storage. Switch backends with a single environment variable —
-                the frontend and Celery workers stay identical.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+     
 
-      {/* Features */}
-      <section className="relative z-10 px-6 py-20 max-w-5xl mx-auto">
-        <h2 className="text-2xl font-semibold text-white text-center mb-12">
-          Everything you need to process documents at scale
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {features.map((f) => (
-            <div key={f.title} className="card p-6 hover:border-accent/30 transition-colors duration-200">
-              <div className="text-2xl mb-4">{f.icon}</div>
-              <h3 className="text-sm font-semibold text-white mb-2">{f.title}</h3>
-              <p className="text-sm text-slate-400 leading-relaxed">{f.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+      
 
       {/* How it works */}
       <section className="relative z-10 px-6 py-20 border-t border-border">
@@ -192,7 +163,10 @@ export default function Landing() {
                 {i < steps.length - 1 && (
                   <div className="hidden sm:block absolute top-6 left-[60%] w-full h-px bg-border" />
                 )}
-                <div className="w-12 h-12 rounded-xl bg-surface-2 border border-border flex items-center justify-center text-accent font-mono text-xs font-bold mx-auto mb-4 relative z-10">
+                <div
+                  className="w-12 h-12 rounded-xl bg-surface-2 border border-border flex items-center justify-center font-mono text-xs font-bold mx-auto mb-4 relative z-10"
+                  style={{ color: i % 2 === 0 ? '#6EE7B7' : '#a78bfa' }}
+                >
                   {s.n}
                 </div>
                 <p className="text-sm font-semibold text-white mb-1">{s.label}</p>
@@ -205,10 +179,15 @@ export default function Landing() {
 
       {/* CTA */}
       <section className="relative z-10 px-6 py-24 text-center">
-        <div className="max-w-xl mx-auto card p-12">
-          <h2 className="text-3xl font-bold text-white mb-4">Ready to get started?</h2>
+        <div className="max-w-xl mx-auto card p-12" style={{ borderColor: 'rgba(167,139,250,0.15)' }}>
+          <h2 className="text-3xl font-bold mb-4" style={{
+            background: 'linear-gradient(135deg, #6EE7B7 0%, #a78bfa 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
           <p className="text-slate-400 mb-8 text-sm leading-relaxed">
-            Create a free account and upload your first document in under a minute.
+          }}>Process your first document →</h2>
+            
           </p>
           <button onClick={() => navigate(token ? '/' : '/register')} className="btn-primary px-8 py-3 text-base">
             {token ? 'Open Dashboard' : 'Create free account'} →

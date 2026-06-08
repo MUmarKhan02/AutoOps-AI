@@ -18,6 +18,9 @@ export default {
           DEFAULT: '#6EE7B7',
           dim: '#34d399',
           muted: '#6EE7B720',
+          purple: '#a78bfa',        // add purple
+          'purple-dim': '#7c3aed',
+          'purple-muted': '#a78bfa20',
         },
         border: '#2d2d35',
       },

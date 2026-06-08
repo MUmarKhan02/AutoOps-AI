@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { Outlet, NavLink, useNavigate } from 'react-router-dom'
 import { LayoutDashboard, Upload, Clock, LogOut } from 'lucide-react'
 import { useAuthStore } from '../../store/auth.store'
-import logoUrl from '../../assets/logo.svg'
+import logoUrl from '../../assets/logo.png'
 
 const navItems = [
   { to: '/', icon: LayoutDashboard, label: 'Dashboard', end: true },
