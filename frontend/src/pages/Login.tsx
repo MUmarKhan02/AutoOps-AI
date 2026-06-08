@@ -38,7 +38,7 @@ export default function Login() {
 
       {/* Logo top left */}
       <div className="absolute top-6 left-8 z-10">
-        <img src={logoUrl} alt="AutoOps AI" className="h-10 w-auto" style={{ mixBlendMode: 'screen' }} />
+        <img src={logoUrl} alt="AutoOps AI" className="h-16 w-auto" style={{ mixBlendMode: 'screen' }} />
       </div>
 
       <div className="relative z-10 w-full max-w-sm">
