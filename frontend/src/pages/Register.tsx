@@ -22,7 +22,7 @@ function PasswordStrength({ password }: { password: string }) {
           className={`text-[10px] px-2 py-0.5 rounded-full border font-medium transition-colors ${pass
             ? 'bg-emerald-950/50 border-emerald-900/50 text-emerald-400'
             : 'bg-surface-3 border-border text-slate-500'
-            }`}
+          }`}
         >
           {pass ? '✓' : '·'} {label}
         </span>
@@ -63,12 +63,12 @@ export default function Register() {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full pointer-events-none"
         style={{ background: 'radial-gradient(circle, rgba(110,231,183,0.04) 0%, rgba(167,139,250,0.03) 50%, transparent 70%)', filter: 'blur(40px)' }} />
 
-      <div className="relative z-10 w-full max-w-sm">
-        {/* Logo */}
-        <div className="absolute top-6 left-8 z-10">
-          <img src={logoUrl} alt="AutoOps AI" className="h-10 w-auto" style={{ mixBlendMode: 'screen' }}/>
-        </div>
+      {/* Logo top left */}
+      <div className="absolute top-6 left-8 z-10">
+        <img src={logoUrl} alt="AutoOps AI" className="h-10 w-auto" style={{ mixBlendMode: 'screen' }} />
+      </div>
 
+      <div className="relative z-10 w-full max-w-sm">
         <div className="mb-8 text-center">
           <h1 className="text-3xl font-bold text-white mb-2">Create account</h1>
           <p className="text-slate-400 text-sm">Start processing documents with AI in seconds</p>
@@ -137,8 +137,7 @@ export default function Register() {
         <div className="mt-6 pt-6 border-t border-border text-center">
           <p className="text-sm text-slate-500">
             Already have an account?{' '}
-            <Link to="/login" className="font-medium hover:underline"
-              style={{ color: '#a78bfa' }}>
+            <Link to="/login" className="font-medium hover:underline" style={{ color: '#a78bfa' }}>
               Sign in
             </Link>
           </p>

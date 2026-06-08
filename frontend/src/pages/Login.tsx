@@ -36,12 +36,12 @@ export default function Login() {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full pointer-events-none"
         style={{ background: 'radial-gradient(circle, rgba(110,231,183,0.04) 0%, rgba(167,139,250,0.03) 50%, transparent 70%)', filter: 'blur(40px)' }} />
 
-      <div className="relative z-10 w-full max-w-sm">
-        {/* Logo */}
-        <div className="absolute top-6 left-8 z-10">
-          <img src={logoUrl} alt="AutoOps AI" className="h-10 w-auto" style={{ mixBlendMode: 'screen' }}/>
-        </div>
+      {/* Logo top left */}
+      <div className="absolute top-6 left-8 z-10">
+        <img src={logoUrl} alt="AutoOps AI" className="h-10 w-auto" style={{ mixBlendMode: 'screen' }} />
+      </div>
 
+      <div className="relative z-10 w-full max-w-sm">
         <div className="mb-8 text-center">
           <h1 className="text-3xl font-bold text-white mb-2">Welcome back</h1>
           <p className="text-slate-400 text-sm">Sign in to your workspace to continue</p>
@@ -95,8 +95,7 @@ export default function Login() {
         <div className="mt-8 pt-6 border-t border-border text-center">
           <p className="text-sm text-slate-500">
             Don't have an account?{' '}
-            <Link to="/register" className="font-medium hover:underline"
-              style={{ color: '#a78bfa' }}>
+            <Link to="/register" className="font-medium hover:underline" style={{ color: '#a78bfa' }}>
               Create one free
             </Link>
           </p>
