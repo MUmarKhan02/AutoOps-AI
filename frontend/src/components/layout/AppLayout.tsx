@@ -23,7 +23,7 @@ export default function AppLayout() {
       <aside className="w-60 bg-surface-1 border-r border-border flex flex-col shrink-0">
         {/* Logo */}
         <div className="px-5 py-4 border-b border-border">
-          <img src={logoUrl} alt="AutoOps AI" className="h-8 w-auto" />
+          <img src={logoUrl} alt="AutoOps AI" className="h-20 w-auto" />
         </div>
 
         {/* Nav */}
