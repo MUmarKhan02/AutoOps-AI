@@ -96,16 +96,16 @@ export default function Landing() {
       <section className="relative z-10 flex flex-col items-center text-center px-6 pt-28 pb-24">
         
 
-        <h1 className="text-5xl sm:text-7xl font-bold text-white leading-[1.05] tracking-tight max-w-4xl mb-6">
-          Operational<br />
-          <span style={{
-            background: 'linear-gradient(135deg, #6EE7B7 0%, #a78bfa 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
-          }}>intelligence</span><br />
-          for documents
-        </h1>
+      <h1 className="text-5xl sm:text-7xl font-bold leading-[1.05] tracking-tight max-w-4xl mb-6">
+        <span className="text-white">Operational</span><br />
+        <span style={{
+          background: 'linear-gradient(135deg, #6EE7B7 0%, #a78bfa 100%)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          backgroundClip: 'text',
+        }}>intelligence</span><br />
+        <span className="text-white">for documents</span>
+      </h1>
 
         <p className="text-slate-400 text-lg max-w-xl mb-10 leading-relaxed">
           Drop in any document. AutoOps AI parses, extracts key information hands it back. Automation, just at your fingertips. 
