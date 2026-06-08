@@ -65,8 +65,8 @@ export default function Register() {
 
       <div className="relative z-10 w-full max-w-sm">
         {/* Logo */}
-        <div className="flex items-center justify-center gap-2.5 mb-10">
-          <img src={logoUrl} alt="AutoOps AI" className="h-20 w-auto" style={{ mixBlendMode: 'screen' }}/>
+        <div className="absolute top-6 left-8 z-10">
+          <img src={logoUrl} alt="AutoOps AI" className="h-10 w-auto" style={{ mixBlendMode: 'screen' }}/>
         </div>
 
         <div className="mb-8 text-center">
