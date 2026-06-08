@@ -185,10 +185,11 @@ export default function Landing() {
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
             backgroundClip: 'text',
-          <p className="text-slate-400 mb-8 text-sm leading-relaxed">
-          }}>Process your first document →</h2>
+          }}>
+            Process your first document →
+          </h2>
             
-          </p>
+          
           <button onClick={() => navigate(token ? '/' : '/register')} className="btn-primary px-8 py-3 text-base">
             {token ? 'Open Dashboard' : 'Create free account'} →
           </button>
