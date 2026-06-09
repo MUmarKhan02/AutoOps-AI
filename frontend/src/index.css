@@ -24,8 +24,12 @@
   }
 
   .btn-primary {
-    @apply bg-accent text-surface font-semibold px-5 py-2.5 rounded-lg
-           hover:bg-accent-dim transition-colors duration-150 text-sm;
+    @apply font-semibold px-5 py-2.5 rounded-lg text-sm transition-all duration-150;
+    background: linear-gradient(135deg, #6EE7B7 0%, #a78bfa 100%);
+    color: #0f0f11;
+  }
+  .btn-primary:hover {
+  background: linear-gradient(135deg, #34d399 0%, #7c3aed 100%);
   }
 
   .btn-ghost {
