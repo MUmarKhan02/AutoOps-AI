@@ -31,7 +31,15 @@ export default function Dashboard() {
     <div className="p-8 max-w-5xl">
       <div className="mb-8">
         <h1 className="text-2xl font-semibold text-white">
-          Good day, {user?.full_name?.split(' ')[0] ?? '—'}
+          Good day,{' '}
+          <span style={{
+            background: 'linear-gradient(135deg, #6EE7B7 0%, #a78bfa 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+          }}>
+            {user?.full_name?.split(' ')[0] ?? '—'}
+          </span>
         </h1>
         <p className="text-slate-400 text-sm mt-1">Here's your processing overview</p>
       </div>
@@ -42,12 +50,14 @@ export default function Dashboard() {
           Array.from({ length: 4 }).map((_, i) => <StatCardSkeleton key={i} />)
         ) : (
           [
-            { label: 'Total Jobs', value: stats.total, icon: FileText, color: 'text-slate-300' },
-            { label: 'Completed', value: stats.completed, icon: CheckCircle, color: 'text-emerald-400' },
-            { label: 'In Progress', value: stats.processing, icon: Clock, color: 'text-amber-400' },
-            { label: 'Failed', value: stats.failed, icon: AlertCircle, color: 'text-red-400' },
-          ].map(({ label, value, icon: Icon, color }) => (
-            <div key={label} className="card p-5">
+            { label: 'Total Jobs', value: stats.total, icon: FileText, color: 'text-slate-300', accent: false },
+            { label: 'Completed', value: stats.completed, icon: CheckCircle, color: 'text-emerald-400', accent: false },
+            { label: 'In Progress', value: stats.processing, icon: Clock, color: 'text-amber-400', accent: false },
+            { label: 'Failed', value: stats.failed, icon: AlertCircle, color: 'text-red-400', accent: false },
+          ].map(({ label, value, icon: Icon, color }, i) => (
+            <div key={label} className="card p-5" style={{
+              borderColor: i === 1 ? 'rgba(110,231,183,0.15)' : i === 2 ? 'rgba(167,139,250,0.15)' : undefined
+            }}>
               <div className="flex items-center justify-between mb-3">
                 <span className="text-xs text-slate-500 uppercase tracking-wide">{label}</span>
                 <Icon size={14} className={color} />
