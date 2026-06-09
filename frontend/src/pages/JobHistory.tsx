@@ -42,7 +42,7 @@ export default function JobHistory() {
         <div className="card divide-y divide-border">
           {jobs.map((job, i) => (
             <div key={job.id}
-              className="flex items-center gap-4 px-5 py-4 hover:bg-surface-2 cursor-pointer transition-colors"
+              className="flex items-center gap-4 px-5 py-4 hover:bg-surface-3 cursor-pointer transition-colors rounded-lg mx-1"
               onClick={() => navigate(`/jobs/${job.id}`)}>
               <FileIcon type={job.document?.file_type ?? 'txt'} />
               <div className="flex-1 min-w-0">

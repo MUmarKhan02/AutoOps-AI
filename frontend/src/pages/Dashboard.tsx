@@ -101,7 +101,7 @@ export default function Dashboard() {
             {recent.map((job) => (
               <div
                 key={job.id}
-                className="flex items-center justify-between px-5 py-3.5 hover:bg-surface-2 cursor-pointer transition-colors"
+                className="flex items-center justify-between px-5 py-3.5 hover:bg-surface-3 cursor-pointer transition-colors rounded-lg mx-1"
                 onClick={() => navigate(`/jobs/${job.id}`)}
               >
                 <div className="flex items-center gap-3">
