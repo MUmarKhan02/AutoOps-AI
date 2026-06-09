@@ -58,7 +58,7 @@ export default function Upload() {
   const fileType = file ? getFileType(file) : null
 
   return (
-    <div className="min-h-screen flex flex-col justify-center p-8 max-w-2xl mx-auto">
+    <div className="min-h-screen flex flex-col justify-center items-center p-8 max-w-2xl mx-auto">
       <h1 className="text-2xl font-semibold text-white mb-1">Upload Document</h1>
       <p className="text-slate-400 text-sm mb-8">PDF, DOCX, or TXT — up to {MAX_MB}MB</p>
 
