@@ -78,7 +78,7 @@ export default function Landing() {
       {/* Nav */}
       <nav className="relative z-10 flex items-center justify-between px-8 py-5 border-b border-border/50 backdrop-blur-sm bg-surface/80">
         <div className="flex items-center gap-3">
-          <img src={iconUrl} alt="AutoOps AI" className="h-16 w-auto" />
+          <img src={iconUrl} alt="AutoOps AI" className="h-20 w-auto" />
         </div>
         <div className="flex items-center gap-3">
           {token ? (
@@ -186,7 +186,7 @@ export default function Landing() {
             WebkitTextFillColor: 'transparent',
             backgroundClip: 'text',
           }}>
-            Process your first document →
+            Process your first document
           </h2>
             
           
