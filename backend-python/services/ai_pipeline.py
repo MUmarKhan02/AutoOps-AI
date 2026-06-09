@@ -61,7 +61,7 @@ def _call_gemini(prompt: str, max_tokens: int = 2048) -> str:
         method="POST"
     )
 
-    with urllib.request.urlopen(req, timeout=30) as resp:
+    with urllib.request.urlopen(req, timeout=60) as resp:
         data = json.loads(resp.read().decode("utf-8"))
 
     return data["candidates"][0]["content"]["parts"][0]["text"].strip()
@@ -80,20 +80,24 @@ def run_pipeline(chunks: list[str], parsed: dict) -> dict:
 
 
 def summarize(full_text: str) -> str:
-    prompt = f"""You are a document analyst. Read the following document and write a clear, concise summary in 3-5 sentences.
-Focus on the main purpose, key topics, and important details.
+    # Use up to 12000 chars to give Gemini enough context for longer docs
+    excerpt = full_text[:12000]
+    prompt = f"""You are a document analyst. Read the following document and write a thorough, complete summary.
+Cover the main purpose, all key topics, important people or entities, dates, figures, and conclusions.
+Write in flowing prose. Do not truncate or cut off mid-sentence.
 
 Document:
-{full_text[:6000]}
+{excerpt}
 
 Summary:"""
     try:
-        return _call_gemini(prompt, max_tokens=512)
+        return _call_gemini(prompt, max_tokens=1024)
     except Exception as e:
         return f"Summary unavailable: {str(e)}"
 
 
 def extract(full_text: str) -> dict:
+    excerpt = full_text[:12000]
     prompt = f"""You are a data extraction assistant. Extract key information from this document as a JSON object.
 
 Rules:
@@ -106,13 +110,12 @@ Rules:
   Report → title, author, date, key_findings, recommendations
 
 Document:
-{full_text[:6000]}
+{excerpt}
 
 JSON:"""
     try:
         raw = _call_gemini(prompt, max_tokens=2048)
         clean = raw.strip()
-        # Strip markdown fences if present
         if clean.startswith("```"):
             clean = clean.split("\n", 1)[-1]
         if clean.endswith("```"):
