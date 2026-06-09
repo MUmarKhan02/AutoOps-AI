@@ -22,9 +22,9 @@ export default function AppLayout() {
     <div className="flex h-screen overflow-hidden">
       <aside className="w-60 bg-surface-1 border-r border-border flex flex-col shrink-0">
         {/* Logo */}
-        <div className="px-5 py-4 border-b border-border">
-          <img src={logoUrl} alt="AutoOps AI" className="h-8 w-auto" />
-        </div>
+       <div className="px-4 py-3 border-b border-border">
+          <img src={logoUrl} alt="AutoOps AI" className="w-full h-auto" style={{ mixBlendMode: 'screen' }} />
+       </div>
 
         {/* Nav */}
         <nav className="flex-1 px-3 py-4 space-y-0.5">

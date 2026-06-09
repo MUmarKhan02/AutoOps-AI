@@ -58,7 +58,7 @@ export default function Upload() {
   const fileType = file ? getFileType(file) : null
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center p-8 max-w-2xl mx-auto">
+    <div className="min-h-screen flex flex-col justify-center items-center p-8 max-w-3xl mx-auto">
       <h1 className="text-2xl font-semibold text-white mb-1">Upload Document</h1>
       <p className="text-slate-400 text-sm mb-8">PDF, DOCX, or TXT — up to {MAX_MB}MB</p>
 
@@ -67,7 +67,7 @@ export default function Upload() {
         onDragLeave={() => setDragging(false)}
         onDrop={onDrop}
         onClick={() => !file && inputRef.current?.click()}
-        className={`border-2 border-dashed rounded-xl p-14 text-center transition-all
+        className={`w-full border-2 border-dashed rounded-xl p-24 text-center transition-all
           ${dragging ? 'border-accent bg-accent/5' : 'border-border hover:border-slate-500'}
           ${file ? 'cursor-default' : 'cursor-pointer'}`}
         style={dragging ? { borderColor: '#6EE7B7' } : {}}
