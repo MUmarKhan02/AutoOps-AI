@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useRef } from 'react'
 import logoUrl from '../assets/logo.png'
-
+import iconUrl from '../assets/icon.png'
 
 
 const steps = [
@@ -78,7 +78,7 @@ export default function Landing() {
       {/* Nav */}
       <nav className="relative z-10 flex items-center justify-between px-8 py-5 border-b border-border/50 backdrop-blur-sm bg-surface/80">
         <div className="flex items-center gap-3">
-          <img src={logoUrl} alt="AutoOps AI" className="h-8 w-auto" />
+          <img src={iconUrl} alt="AutoOps AI" className="h-16 w-auto" />
         </div>
         <div className="flex items-center gap-3">
           {token ? (
@@ -198,8 +198,8 @@ export default function Landing() {
 
       {/* Footer */}
       <footer className="relative z-10 border-t border-border px-8 py-6 flex items-center justify-between">
-        <img src={logoUrl} alt="AutoOps AI" className="h-6 w-auto opacity-60" />
-        <p className="text-xs text-slate-600">FastAPI · ASP.NET Core · Celery · Redis · React · Gemini</p>
+        <p className="text-sm text-slate-500">&copy; 2026 AutoOps AI. Built by Muhammad Umar Khan.</p>
+        
       </footer>
     </div>
   )
