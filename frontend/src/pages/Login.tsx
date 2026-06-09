@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../store/auth.store'
 import { useToast } from '../components/ui/Toast'
-import logoUrl from '../assets/logo.png'
+import logoUrl from '../assets/icon.png'
 
 export default function Login() {
   const { login } = useAuthStore()
@@ -38,7 +38,7 @@ export default function Login() {
 
       {/* Logo top left */}
       <div className="absolute top-6 left-8 z-10">
-        <img src={logoUrl} alt="AutoOps AI" className="h-16 w-auto" style={{ mixBlendMode: 'screen' }} />
+        <img src={logoUrl} alt="AutoOps AI" className="h-16 w-auto cursor-pointer" style={{ mixBlendMode: 'screen' }}  onClick={() => navigate('/landing')}/>
       </div>
 
       <div className="relative z-10 w-full max-w-sm">

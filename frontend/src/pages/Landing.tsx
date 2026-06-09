@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useRef } from 'react'
-import logoUrl from '../assets/logo.png'
+import logoUrl from '../assets/logo_hero.png'
 import iconUrl from '../assets/icon.png'
 
 
@@ -115,7 +115,7 @@ export default function Landing() {
           <button onClick={() => navigate(token ? '/' : '/register')} className="btn-primary px-7 py-3 text-base">
             {token ? 'Open Dashboard' : 'Start for free'} →
           </button>
-          <button onClick={() => navigate('/login')} className="btn-ghost px-7 py-3 text-base">Sign in</button>
+          
         </div>
 
         {/* Logo showcase */}

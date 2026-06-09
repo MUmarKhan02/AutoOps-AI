@@ -23,7 +23,7 @@ export default function AppLayout() {
       <aside className="w-60 bg-surface-1 border-r border-border flex flex-col shrink-0">
         {/* Logo */}
        <div className="px-4 py-3 border-b border-border">
-          <img src={logoUrl} alt="AutoOps AI" className="w-full h-auto" style={{ mixBlendMode: 'screen' }} />
+          <img src={logoUrl} alt="AutoOps AI" className="w-full h-auto cursor-pointer" style={{ mixBlendMode: 'screen' }} onClick={() => navigate('/landing')} />
        </div>
 
         {/* Nav */}
