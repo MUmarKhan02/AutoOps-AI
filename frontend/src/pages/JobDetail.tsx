@@ -139,7 +139,7 @@ export default function JobDetail() {
   const fileType = job.document?.file_type ?? 'txt'
 
   return (
-    <div className="p-8 max-w-7xl">
+    <div className="p-8 w-full">
       <button onClick={() => navigate(-1)} className="flex items-center gap-1.5 text-sm text-slate-400 hover:text-slate-200 mb-6 transition-colors">
         <ArrowLeft size={14} /> Back
       </button>
