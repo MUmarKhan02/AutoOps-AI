@@ -32,7 +32,7 @@ function StageTracker({ stage, status }: { stage: string; status: string }) {
           const isLast = i === arr.length - 1
 
           return (
-            <div key={s} className="flex items-center ${!isLast ? 'flex-1' : ''}`}">
+            <div key={s} className="flex items-center gap-0">
               <div className="flex flex-col items-center">
                 <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-500
                   ${done ? 'bg-accent text-surface' : current ? 'bg-accent/20 border-2 border-accent text-accent' : 'bg-surface-3 border border-border text-slate-600'}`}>
