@@ -175,7 +175,7 @@ export default function JobDetail() {
       {resultLoading && <ResultSkeleton />}
 
       {result && !resultLoading && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
           {/* LEFT COLUMN — Summary + Document Info + Chunks */}
           <div className="space-y-5">
