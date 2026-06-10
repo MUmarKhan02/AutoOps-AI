@@ -22,7 +22,7 @@ function StageTracker({ stage, status }: { stage: string; status: string }) {
         {active && <RefreshCw size={13} className="animate-spin text-accent" />}
         <span>{active ? 'Processing your document…' : failed ? 'Processing failed' : 'Processing complete'}</span>
       </div>
-      <div className="flex items-center gap-0">
+      <div className="flex items-center gap-0 w-fit">
         {STAGES.filter(s => s !== 'queued').map((s, i, arr) => {
           const effectiveStage = status === 'completed' ? 'completed' : stage
           const stageIdx = STAGES.indexOf(effectiveStage)

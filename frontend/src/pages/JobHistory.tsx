@@ -11,15 +11,15 @@ export default function JobHistory() {
 
   return (
     <div className="p-8 max-w-3xl mx-auto w-full">
-      <div className="flex items-center justify-between mb-1">
-        <h1 className="text-2xl font-semibold text-white">Processing History</h1>
+      <div className="flex items-center justify-between mb-1 relative">
+        <h1 className="text-2xl font-semibold text-white w-full text-center">Processing History</h1>
         <button onClick={refresh}
           className="text-slate-500 hover:text-slate-300 transition-colors p-1.5 rounded-lg hover:bg-surface-2"
           title="Refresh">
           <RefreshCw size={14} />
         </button>
       </div>
-      <p className="text-slate-400 text-sm mb-8">All document jobs in your account</p>
+      <p className="text-slate-400 text-sm mb-8 text-center">All document jobs in your account</p>
 
       {error && <p className="text-xs text-red-400 mb-4">{error}</p>}
 
