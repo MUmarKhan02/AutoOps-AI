@@ -10,7 +10,7 @@ export default function JobHistory() {
   const navigate = useNavigate()
 
   return (
-    <div className="p-8 max-w-4xl">
+    <div className="p-8 max-w-3xl mx-auto w-full">
       <div className="flex items-center justify-between mb-1">
         <h1 className="text-2xl font-semibold text-white">Processing History</h1>
         <button onClick={refresh}
