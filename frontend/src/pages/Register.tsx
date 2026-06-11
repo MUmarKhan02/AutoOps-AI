@@ -126,7 +126,7 @@ export default function Register() {
                 <span className="w-3.5 h-3.5 rounded-full border-2 border-surface border-t-transparent animate-spin" />
                 Creating account…
               </span>
-            ) : 'Create account →'}
+            ) : 'Create account'}
           </button>
         </form>
 

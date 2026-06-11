@@ -88,7 +88,7 @@ export default function Login() {
                 <span className="w-3.5 h-3.5 rounded-full border-2 border-surface border-t-transparent animate-spin" />
                 Signing in…
               </span>
-            ) : 'Sign in →'}
+            ) : 'Sign in'}
           </button>
         </form>
 
