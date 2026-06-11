@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { CheckCircle, Clock, AlertCircle, ArrowRight, Upload, FileText } from 'lucide-react'
+import { CheckCircle, Clock, AlertCircle, ArrowRight, Upload, FileText, AlertTriangle } from 'lucide-react'
 import { jobService } from '../services/document.service'
 import type { Job } from '../types'
 import StatusBadge from '../components/ui/StatusBadge'
@@ -23,6 +23,7 @@ export default function Dashboard() {
     completed: jobs.filter((j) => j.status === 'completed').length,
     processing: jobs.filter((j) => j.status === 'processing' || j.status === 'queued').length,
     failed: jobs.filter((j) => j.status === 'failed').length,
+    incomplete: jobs.filter((j) => j.status === 'incomplete').length,
   }
 
   const recent = jobs.slice(0, 5)
@@ -45,18 +46,23 @@ export default function Dashboard() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-10">
         {loading ? (
-          Array.from({ length: 4 }).map((_, i) => <StatCardSkeleton key={i} />)
+          Array.from({ length: 5 }).map((_, i) => <StatCardSkeleton key={i} />)
         ) : (
           [
-            { label: 'Total Jobs', value: stats.total, icon: FileText, color: 'text-slate-300', accent: false },
-            { label: 'Completed', value: stats.completed, icon: CheckCircle, color: 'text-emerald-400', accent: false },
-            { label: 'In Progress', value: stats.processing, icon: Clock, color: 'text-amber-400', accent: false },
-            { label: 'Failed', value: stats.failed, icon: AlertCircle, color: 'text-red-400', accent: false },
+            { label: 'Total Jobs',  value: stats.total,      icon: FileText,       color: 'text-slate-300' },
+            { label: 'Completed',   value: stats.completed,  icon: CheckCircle,    color: 'text-emerald-400' },
+            { label: 'In Progress', value: stats.processing, icon: Clock,          color: 'text-amber-400' },
+            { label: 'Incomplete',  value: stats.incomplete, icon: AlertTriangle,  color: 'text-orange-400' },
+            { label: 'Failed',      value: stats.failed,     icon: AlertCircle,    color: 'text-red-400' },
           ].map(({ label, value, icon: Icon, color }, i) => (
             <div key={label} className="card p-5" style={{
-              borderColor: i === 1 ? 'rgba(110,231,183,0.15)' : i === 2 ? 'rgba(167,139,250,0.15)' : undefined
+              borderColor:
+                i === 1 ? 'rgba(110,231,183,0.15)' :
+                i === 2 ? 'rgba(167,139,250,0.15)' :
+                i === 3 ? 'rgba(251,146,60,0.15)' :
+                undefined
             }}>
               <div className="flex items-center justify-between mb-3">
                 <span className="text-xs text-slate-500 uppercase tracking-wide">{label}</span>

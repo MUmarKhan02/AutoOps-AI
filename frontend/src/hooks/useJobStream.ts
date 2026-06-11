@@ -8,10 +8,6 @@ interface StreamState {
   done: boolean
 }
 
-/**
- * Opens an SSE connection for a single job and returns live status.
- * Automatically closes when the job reaches a terminal state.
- */
 export function useJobStream(jobId: string | undefined) {
   const [stream, setStream] = useState<StreamState>({ status: null, stage: null, done: false })
 
