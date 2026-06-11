@@ -87,6 +87,8 @@ function fieldIcon(key: string): { icon: string; purple: boolean } {
   if (k.includes('email'))                                                return { icon: '✉', purple: false }
   if (k.includes('phone') || k.includes('tel'))                          return { icon: '☏', purple: true }
   if (k.includes('date') || k.includes('time') || k.includes('period'))  return { icon: '◷', purple: false }
+  if (k.includes('title') || k.includes('heading') || k.includes('headline') || k.includes('subject')) return { icon: '§', purple: true }
+  if (k.includes('finding') || k.includes('insight'))                    return { icon: '▸', purple: false }
   if (k.includes('name') || k.includes('author') || k.includes('party')) return { icon: '◉', purple: true }
   if (k.includes('skill') || k.includes('tech') || k.includes('lang'))   return { icon: '◈', purple: false }
   if (k.includes('amount') || k.includes('revenue') || k.includes('salary') || k.includes('price')) return { icon: '$', purple: true }
@@ -96,7 +98,7 @@ function fieldIcon(key: string): { icon: string; purple: boolean } {
   if (k.includes('experience') || k.includes('work') || k.includes('job') || k.includes('employ') || k.includes('position') || k.includes('role')) return { icon: '◈', purple: true }
   if (k.includes('cert') || k.includes('award') || k.includes('achievement') || k.includes('license')) return { icon: '◆', purple: false }
   if (k.includes('project') || k.includes('portfolio'))                  return { icon: '⬡', purple: true }
-  if (k.includes('summary') || k.includes('objective') || k.includes('about') || k.includes('bio')) return { icon: '≡', purple: false }
+  if (k.includes('summary') || k.includes('objective') || k.includes('about') || k.includes('bio')  || k.includes('description') || k.includes('overview') || k.includes('abstract')) return { icon: '≡', purple: false }
   if (k.includes('company') || k.includes('org') || k.includes('firm'))  return { icon: '⬡', purple: true }
   if (k.includes('profit') || k.includes('margin') || k.includes('growth')) return { icon: '▲', purple: false }
   return { icon: '►', purple: false }
