@@ -66,11 +66,14 @@ def _parse_txt(path: Path) -> dict:
 
 
 def _parse_pdf(path: Path) -> dict:
-    from pypdf import PdfReader
-    reader = PdfReader(str(path))
-    pages = [page.extract_text() or "" for page in reader.pages]
+    import pdfplumber
+    pages = []
+    with pdfplumber.open(str(path)) as pdf:
+        page_count = len(pdf.pages)
+        for page in pdf.pages:
+            pages.append(page.extract_text() or "")
     text = "\n".join(pages)
-    return _stats(text, page_count=len(reader.pages))
+    return _stats(text, page_count=page_count)
 
 
 def _parse_docx(path: Path) -> dict:
