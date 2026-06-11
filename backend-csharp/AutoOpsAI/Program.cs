@@ -61,8 +61,8 @@ var app = builder.Build();
 
 // ── Create tables with retry (handles transient Railway startup timing) ───────
 var connStr = builder.Configuration.GetConnectionString("DefaultConnection")!;
-var maxRetries = 10;
-var delay = TimeSpan.FromSeconds(3);
+var maxRetries = 20;
+var delay = TimeSpan.FromSeconds(5);
 
 for (int attempt = 1; attempt <= maxRetries; attempt++)
 {
@@ -120,6 +120,7 @@ for (int attempt = 1; attempt <= maxRetries; attempt++)
         Console.WriteLine("[AutoOps] Database tables ready.");
         break;
     }
+
     catch (Exception ex) when (attempt < maxRetries)
     {
         Console.WriteLine($"[AutoOps] DB connection attempt {attempt}/{maxRetries} failed: {ex.Message}. Retrying in {delay.TotalSeconds}s...");
@@ -127,6 +128,8 @@ for (int attempt = 1; attempt <= maxRetries; attempt++)
         delay = TimeSpan.FromSeconds(Math.Min(delay.TotalSeconds * 1.5, 15));
     }
 }
+
+Console.WriteLine("[AutoOps] Warning: Could not verify DB schema on startup. Continuing anyway.");
 
 app.UseCors();
 app.UseAuthentication();
