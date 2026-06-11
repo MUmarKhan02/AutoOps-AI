@@ -15,7 +15,7 @@ export interface Document {
   created_at: string
 }
 
-export type JobStatus = 'queued' | 'processing' | 'completed' | 'failed'
+export type JobStatus = 'queued' | 'processing' | 'completed' | 'failed' | 'incomplete'
 
 export interface Job {
   id: string

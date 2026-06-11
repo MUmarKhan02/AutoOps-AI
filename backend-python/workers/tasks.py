@@ -4,14 +4,18 @@ from sqlalchemy.orm import sessionmaker
 
 from workers.celery_app import celery_app
 from core.config import settings
-from models.job import ProcessingJob, ProcessingResult, PROCESSING, COMPLETED, FAILED
+from models.job import ProcessingJob, ProcessingResult, PROCESSING, COMPLETED, FAILED, INCOMPLETE
 from services.document_parser import parse_document
 from services.ai_pipeline import run_pipeline
 
-# Synchronous engine for Celery workers — avoids asyncio event loop conflicts
 _sync_url = settings.database_url.replace("postgresql+asyncpg://", "postgresql://").replace("postgresql://", "postgresql://")
 SyncEngine = create_engine(_sync_url, pool_pre_ping=True)
 SyncSession = sessionmaker(SyncEngine)
+
+
+def _is_gemini_overload(exc: Exception) -> bool:
+    msg = str(exc).lower()
+    return "503" in msg or "service unavailable" in msg or "overloaded" in msg
 
 
 def _update_job(job_id: str, **kwargs):
@@ -54,7 +58,21 @@ def process_document(self, job_id: str, document_id: str, storage_path: str, fil
 
         # Stage 3: AI extraction & summarization
         _update_job(job_id, stage="analyzing")
-        ai_result = run_pipeline(chunks, parsed)
+        try:
+            ai_result = run_pipeline(chunks, parsed)
+        except Exception as ai_exc:
+            if _is_gemini_overload(ai_exc):
+                # Gemini was temporarily unavailable — save what we have and mark incomplete
+                _save_result(job_id, {"summary": None, "extracted_data": {}}, chunks, parsed)
+                _update_job(
+                    job_id,
+                    status=INCOMPLETE,
+                    stage="completed",
+                    error_message="AI analysis could not be completed — Gemini was temporarily unavailable. The document was parsed and chunked successfully. Try reprocessing later.",
+                    completed_at=datetime.now(timezone.utc)
+                )
+                return
+            raise
 
         # Stage 4: persist result
         _save_result(job_id, ai_result, chunks, parsed)

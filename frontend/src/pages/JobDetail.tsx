@@ -1,7 +1,7 @@
 /// <reference types="vite/client" />
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { ArrowLeft, RefreshCw, FileText, Hash, Clock, AlignLeft, Database, Layers } from 'lucide-react'
+import { ArrowLeft, RefreshCw, FileText, Hash, Clock, AlignLeft, Database, Layers, AlertTriangle } from 'lucide-react'
 import { useToast } from '../components/ui/Toast'
 import { jobService } from '../services/document.service'
 import { useJobStream } from '../hooks/useJobStream'
@@ -15,19 +15,26 @@ const STAGES = ['queued', 'parsing', 'chunking', 'analyzing', 'completed']
 function StageTracker({ stage, status }: { stage: string; status: string }) {
   const active = status === 'processing' || status === 'queued'
   const failed = status === 'failed'
+  const incomplete = status === 'incomplete'
+
+  const label = active ? 'Processing your document…'
+    : failed ? 'Processing failed'
+    : incomplete ? 'Processing incomplete — AI was temporarily unavailable'
+    : 'Processing complete'
 
   return (
     <div className="card p-5 mb-6">
       <div className="flex items-center gap-2 mb-5 text-sm text-slate-300">
         {active && <RefreshCw size={13} className="animate-spin text-accent" />}
-        <span>{active ? 'Processing your document…' : failed ? 'Processing failed' : 'Processing complete'}</span>
+        {incomplete && <AlertTriangle size={13} className="text-orange-400" />}
+        <span className={incomplete ? 'text-orange-300' : ''}>{label}</span>
       </div>
       <div className="flex items-center gap-0">
         {STAGES.filter(s => s !== 'queued').map((s, i, arr) => {
-          const effectiveStage = status === 'completed' ? 'completed' : stage
+          const effectiveStage = (status === 'completed' || status === 'incomplete') ? 'completed' : stage
           const stageIdx = STAGES.indexOf(effectiveStage)
           const thisIdx = STAGES.indexOf(s)
-          const done = stageIdx > thisIdx || (s === 'completed' && status === 'completed')
+          const done = stageIdx > thisIdx || (s === 'completed' && (status === 'completed' || status === 'incomplete'))
           const current = stageIdx === thisIdx && active
           const isLast = i === arr.length - 1
 
@@ -35,7 +42,10 @@ function StageTracker({ stage, status }: { stage: string; status: string }) {
             <div key={s} className="flex items-center flex-1">
               <div className="flex flex-col items-center">
                 <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-500
-                  ${done ? 'bg-accent text-surface' : current ? 'bg-accent/20 border-2 border-accent text-accent' : 'bg-surface-3 border border-border text-slate-600'}`}>
+                  ${done && !incomplete ? 'bg-accent text-surface'
+                    : done && incomplete ? 'bg-orange-500/80 text-white'
+                    : current ? 'bg-accent/20 border-2 border-accent text-accent'
+                    : 'bg-surface-3 border border-border text-slate-600'}`}>
                   {done ? '✓' : i + 1}
                 </div>
                 <span className={`text-[10px] mt-1.5 capitalize font-medium ${current ? 'text-accent' : done ? 'text-slate-400' : 'text-slate-600'}`}>
@@ -43,7 +53,7 @@ function StageTracker({ stage, status }: { stage: string; status: string }) {
                 </span>
               </div>
               {!isLast && (
-                <div className={`flex-1 h-px mx-1 mb-4 transition-all duration-500 ${done ? 'bg-accent/50' : 'bg-border'}`} />
+                <div className={`flex-1 h-px mx-1 mb-4 transition-all duration-500 ${done ? incomplete ? 'bg-orange-500/40' : 'bg-accent/50' : 'bg-border'}`} />
               )}
             </div>
           )
@@ -108,7 +118,7 @@ export default function JobDetail() {
     jobService.get(jobId).then((j) => {
       setJob(j)
       setLoading(false)
-      if (j.status === 'completed') {
+      if (j.status === 'completed' || j.status === 'incomplete') {
         setResultLoading(true)
         jobService.getResult(jobId).then(setResult).finally(() => setResultLoading(false))
       }
@@ -123,6 +133,11 @@ export default function JobDetail() {
         setJob(j)
         if (j.status === 'completed') {
           toast.success('Processing complete — results ready')
+          setResultLoading(true)
+          jobService.getResult(jobId).then(setResult).finally(() => setResultLoading(false))
+        }
+        if (j.status === 'incomplete') {
+          toast.info('Processing incomplete — AI was temporarily unavailable')
           setResultLoading(true)
           jobService.getResult(jobId).then(setResult).finally(() => setResultLoading(false))
         }
@@ -160,14 +175,15 @@ export default function JobDetail() {
         <StatusBadge status={liveStatus} />
       </div>
 
-      {/* Stage tracker — full width */}
-      {(liveStatus === 'queued' || liveStatus === 'processing' || liveStatus === 'completed' || liveStatus === 'failed') && (
+      {/* Stage tracker */}
+      {(liveStatus === 'queued' || liveStatus === 'processing' || liveStatus === 'completed' || liveStatus === 'failed' || liveStatus === 'incomplete') && (
         <StageTracker stage={liveStage} status={liveStatus} />
       )}
 
+      {/* Hard failure banner */}
       {liveStatus === 'failed' && (
         <div className="card p-5 mb-6 border-red-900/40 bg-red-950/20">
-          <p className="text-sm text-red-400 font-medium mb-1">Error details</p>
+          <p className="text-sm text-red-400 font-medium mb-1">Processing failed</p>
           <p className="text-xs text-slate-400 font-mono">{job.error_message ?? 'Unknown error'}</p>
         </div>
       )}
@@ -177,8 +193,36 @@ export default function JobDetail() {
       {result && !resultLoading && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-          {/* LEFT COLUMN — Summary + Document Info + Chunks */}
+          {/* LEFT COLUMN */}
           <div className="space-y-5">
+
+            {/* Incomplete notice */}
+            {liveStatus === 'incomplete' && (
+              <div className="card p-5 border-orange-900/40 bg-orange-950/10">
+                <div className="flex items-center gap-2 mb-2">
+                  <AlertTriangle size={14} className="text-orange-400 shrink-0" />
+                  <p className="text-sm text-orange-300 font-medium">AI analysis partially unavailable</p>
+                </div>
+                <p className="text-xs text-slate-400 leading-relaxed mb-3">
+                  Gemini was temporarily overloaded when this document was processed. The document was parsed and chunked successfully, but the AI summary and field extraction could not be completed.
+                </p>
+                <div className="text-xs text-slate-500 space-y-1">
+                  <p>✓ Document parsed and chunked — available below</p>
+                  <p>✗ AI summary — unavailable</p>
+                  <p>✗ Extracted fields — unavailable</p>
+                </div>
+                <div className="mt-4 pt-4 border-t border-border">
+                  <p className="text-xs text-slate-500 mb-2">To get the full results, re-upload the document when Gemini is available.</p>
+                  <button
+                    onClick={() => navigate('/upload')}
+                    className="text-xs font-medium px-3 py-1.5 rounded-lg transition-colors"
+                    style={{ background: 'rgba(251,146,60,0.15)', color: '#fb923c', border: '1px solid rgba(251,146,60,0.3)' }}
+                  >
+                    Re-upload document →
+                  </button>
+                </div>
+              </div>
+            )}
 
             {/* Summary */}
             {result.summary && (
@@ -251,7 +295,7 @@ export default function JobDetail() {
 
           {/* RIGHT COLUMN — Extracted Fields */}
           <div>
-            {result.extracted_data && Object.keys(result.extracted_data).length > 0 && (
+            {result.extracted_data && Object.keys(result.extracted_data).length > 0 ? (
               <div className="card overflow-hidden">
                 <div className="flex items-center gap-2 px-5 py-3.5 border-b border-border bg-surface-2">
                   <Database size={13} className="text-accent" />
@@ -271,7 +315,15 @@ export default function JobDetail() {
                   })}
                 </div>
               </div>
-            )}
+            ) : liveStatus === 'incomplete' ? (
+              <div className="card p-6 text-center border-orange-900/20">
+                <AlertTriangle size={24} className="text-orange-400 mx-auto mb-3" />
+                <p className="text-sm text-slate-300 font-medium mb-1">Fields could not be extracted</p>
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  Gemini was unavailable during extraction. Re-upload the document to get structured field data.
+                </p>
+              </div>
+            ) : null}
           </div>
 
         </div>

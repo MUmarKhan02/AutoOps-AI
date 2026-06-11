@@ -56,4 +56,5 @@
   .badge-processing { @apply bg-amber-900/50 text-amber-300; }
   .badge-completed  { @apply bg-emerald-900/50 text-emerald-300; }
   .badge-failed     { @apply bg-red-900/50 text-red-300; }
+  .badge-incomplete  { @apply bg-orange-900/50 text-orange-300; }
 }

@@ -58,10 +58,6 @@ public class JobsController(AppDbContext db) : ControllerBase
         ));
     }
 
-    /// <summary>
-    /// Server-Sent Events endpoint — polls DB every 2s and pushes status updates.
-    /// EventSource can't send Authorization headers so token comes via ?token= query param.
-    /// </summary>
     [HttpGet("{jobId}/stream")]
     public async Task Stream(string jobId, CancellationToken ct)
     {
@@ -93,7 +89,8 @@ public class JobsController(AppDbContext db) : ControllerBase
 
             await WriteEvent(Response, payload, ct);
 
-            if (job.Status is "completed" or "failed") break;
+            // Stop streaming on any terminal status
+            if (job.Status is "completed" or "failed" or "incomplete") break;
 
             await Task.Delay(2000, ct);
         }

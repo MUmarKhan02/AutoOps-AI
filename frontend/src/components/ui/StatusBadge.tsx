@@ -5,6 +5,7 @@ const config: Record<JobStatus, { label: string; dot: string }> = {
   processing: { label: 'Processing', dot: 'bg-amber-400 animate-pulse' },
   completed:  { label: 'Completed',  dot: 'bg-emerald-400' },
   failed:     { label: 'Failed',     dot: 'bg-red-400' },
+  incomplete: { label: 'Incomplete', dot: 'bg-orange-400' },
 }
 
 export default function StatusBadge({ status }: { status: JobStatus }) {
