@@ -99,7 +99,7 @@ function fieldIcon(key: string): { icon: string; purple: boolean } {
   if (k.includes('summary') || k.includes('objective') || k.includes('about') || k.includes('bio')) return { icon: '≡', purple: false }
   if (k.includes('company') || k.includes('org') || k.includes('firm'))  return { icon: '⬡', purple: true }
   if (k.includes('profit') || k.includes('margin') || k.includes('growth')) return { icon: '▲', purple: false }
-  return { icon: '◦', purple: false }
+  return { icon: '►', purple: false }
 }
 
 // Detects legacy bad data stored before the incomplete fix was deployed
@@ -318,8 +318,9 @@ export default function JobDetail() {
                   <span className="ml-auto text-xs text-slate-600">{Object.keys(result.extracted_data).length} fields</span>
                 </div>
                 <div className="divide-y divide-border">
-                  {Object.entries(result.extracted_data).map(([k, v]) => {
-                    const { icon, purple } = fieldIcon(k)
+                  {Object.entries(result.extracted_data).map(([k, v], idx) => {
+                    const { icon } = fieldIcon(k)
+                    const purple = idx % 2 !== 0
                     return (
                       <div key={k} className="flex items-start gap-4 px-5 py-3.5 hover:bg-surface-3 transition-colors">
                         <span className="text-sm w-4 shrink-0 mt-0.5" style={{ color: purple ? '#a78bfa' : '#6EE7B7' }}>{icon}</span>
