@@ -108,7 +108,7 @@ export default function Landing() {
       </h1>
 
         <p className="text-slate-400 text-lg max-w-xl mb-10 leading-relaxed">
-          Drop in any document. AutoOps AI parses, extracts key information hands it back. Automation, just at your fingertips. 
+          Drop in any document. AutoOps AI parses, extracts key information, and hands it back. Automation, just at your fingertips. 
         </p>
 
         <div className="flex items-center gap-3 flex-wrap justify-center mb-20">
