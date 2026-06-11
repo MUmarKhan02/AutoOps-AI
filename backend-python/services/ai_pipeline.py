@@ -90,10 +90,8 @@ Document:
 {excerpt}
 
 Summary:"""
-    try:
-        return _call_gemini(prompt, max_tokens=1024)
-    except Exception as e:
-        return f"Summary unavailable: {str(e)}"
+    # Let exceptions bubble up to tasks.py so 503s are caught and marked incomplete
+    return _call_gemini(prompt, max_tokens=1024)
 
 
 def extract(full_text: str) -> dict:
@@ -113,16 +111,15 @@ Document:
 {excerpt}
 
 JSON:"""
+    # Let non-JSON-parse exceptions bubble up to tasks.py so 503s are caught and marked incomplete
+    raw = _call_gemini(prompt, max_tokens=2048)
+    clean = raw.strip()
+    if clean.startswith("```"):
+        clean = clean.split("\n", 1)[-1]
+    if clean.endswith("```"):
+        clean = clean.rsplit("```", 1)[0]
+    clean = clean.strip()
     try:
-        raw = _call_gemini(prompt, max_tokens=2048)
-        clean = raw.strip()
-        if clean.startswith("```"):
-            clean = clean.split("\n", 1)[-1]
-        if clean.endswith("```"):
-            clean = clean.rsplit("```", 1)[0]
-        clean = clean.strip()
         return json.loads(clean)
     except json.JSONDecodeError:
-        return {"extraction_note": raw[:800] if 'raw' in dir() else "Parse error"}
-    except Exception as e:
-        return {"error": str(e)}
+        return {"extraction_note": raw[:800]}

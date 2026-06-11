@@ -39,7 +39,7 @@ function StageTracker({ stage, status }: { stage: string; status: string }) {
           const isLast = i === arr.length - 1
 
           return (
-            <div key={s} className="flex items-center flex-1">
+            <div key={s} className={`flex items-center ${!isLast ? 'flex-1' : ''}`}>
               <div className="flex flex-col items-center">
                 <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-500
                   ${done && !incomplete ? 'bg-accent text-surface'
@@ -102,6 +102,16 @@ function fieldIcon(key: string): { icon: string; purple: boolean } {
   return { icon: '◦', purple: false }
 }
 
+// Detects legacy bad data stored before the incomplete fix was deployed
+function isBadSummary(summary: string): boolean {
+  return summary.startsWith('Summary unavailable:') || summary.startsWith('No working Gemini model')
+}
+
+function isBadExtractionData(data: Record<string, unknown>): boolean {
+  const keys = Object.keys(data)
+  return keys.length === 1 && (keys[0] === 'error' || keys[0] === 'extraction_note')
+}
+
 export default function JobDetail() {
   const { jobId } = useParams<{ jobId: string }>()
   const navigate = useNavigate()
@@ -153,6 +163,11 @@ export default function JobDetail() {
   const liveStatus = stream.status ?? job.status
   const fileType = job.document?.file_type ?? 'txt'
 
+  // Treat completed jobs with bad legacy data as visually incomplete
+  const hasLegacyBadSummary = result?.summary ? isBadSummary(result.summary) : false
+  const hasLegacyBadExtraction = result?.extracted_data ? isBadExtractionData(result.extracted_data) : false
+  const isEffectivelyIncomplete = liveStatus === 'incomplete' || (liveStatus === 'completed' && (hasLegacyBadSummary || hasLegacyBadExtraction))
+
   return (
     <div className="p-8 w-full">
       <button onClick={() => navigate(-1)} className="flex items-center gap-1.5 text-sm text-slate-400 hover:text-slate-200 mb-6 transition-colors">
@@ -172,12 +187,12 @@ export default function JobDetail() {
             </p>
           </div>
         </div>
-        <StatusBadge status={liveStatus} />
+        <StatusBadge status={isEffectivelyIncomplete && liveStatus === 'completed' ? 'incomplete' : liveStatus} />
       </div>
 
       {/* Stage tracker */}
       {(liveStatus === 'queued' || liveStatus === 'processing' || liveStatus === 'completed' || liveStatus === 'failed' || liveStatus === 'incomplete') && (
-        <StageTracker stage={liveStage} status={liveStatus} />
+        <StageTracker stage={liveStage} status={isEffectivelyIncomplete ? 'incomplete' : liveStatus} />
       )}
 
       {/* Hard failure banner */}
@@ -196,8 +211,8 @@ export default function JobDetail() {
           {/* LEFT COLUMN */}
           <div className="space-y-5">
 
-            {/* Incomplete notice */}
-            {liveStatus === 'incomplete' && (
+            {/* Incomplete notice — shown for both proper incomplete status and legacy bad data */}
+            {isEffectivelyIncomplete && (
               <div className="card p-5 border-orange-900/40 bg-orange-950/10">
                 <div className="flex items-center gap-2 mb-2">
                   <AlertTriangle size={14} className="text-orange-400 shrink-0" />
@@ -224,8 +239,8 @@ export default function JobDetail() {
               </div>
             )}
 
-            {/* Summary */}
-            {result.summary && (
+            {/* Summary — hide if bad legacy data, show friendly message instead */}
+            {result.summary && !hasLegacyBadSummary && (
               <div className="card overflow-hidden">
                 <div className="flex items-center gap-2 px-5 py-3.5 border-b border-border bg-surface-2">
                   <AlignLeft size={13} className="text-accent" />
@@ -295,7 +310,7 @@ export default function JobDetail() {
 
           {/* RIGHT COLUMN — Extracted Fields */}
           <div>
-            {result.extracted_data && Object.keys(result.extracted_data).length > 0 ? (
+            {result.extracted_data && Object.keys(result.extracted_data).length > 0 && !hasLegacyBadExtraction ? (
               <div className="card overflow-hidden">
                 <div className="flex items-center gap-2 px-5 py-3.5 border-b border-border bg-surface-2">
                   <Database size={13} className="text-accent" />
@@ -315,7 +330,7 @@ export default function JobDetail() {
                   })}
                 </div>
               </div>
-            ) : liveStatus === 'incomplete' ? (
+            ) : isEffectivelyIncomplete ? (
               <div className="card p-6 text-center border-orange-900/20">
                 <AlertTriangle size={24} className="text-orange-400 mx-auto mb-3" />
                 <p className="text-sm text-slate-300 font-medium mb-1">Fields could not be extracted</p>
