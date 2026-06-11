@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../store/auth.store'
 import { useToast } from '../components/ui/Toast'
-import logoUrl from '../assets/logo.png'
+import logoUrl from '../assets/icon.png'
 
 function PasswordStrength({ password }: { password: string }) {
   const checks = [
